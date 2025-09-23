@@ -3,10 +3,8 @@ import type { AxiosInstance } from 'axios';
 
 // Список возможных API серверов в порядке приоритета
 const API_SERVERS = [
-  'http://87.242.103.146/api',      // Основной Docker сервер
-  'http://87.242.103.146:3001/api', // Standalone Node.js сервер
-  'http://87.242.103.146:8080/api', // Python резервный сервер
-  'http://localhost:3001/api',      // Локальная разработка
+  'http://87.242.103.146:3001/api', // Основной backend сервер
+  'http://localhost:3001/api',      // Локальная разработка (только для dev)
 ];
 
 let currentApiUrl: string = import.meta.env.VITE_API_URL || API_SERVERS[0];
