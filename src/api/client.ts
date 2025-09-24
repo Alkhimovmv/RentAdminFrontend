@@ -2,10 +2,14 @@ import axios from 'axios';
 import type { AxiosInstance } from 'axios';
 
 // Список возможных API серверов в порядке приоритета
-const API_SERVERS = [
-  'http://87.242.103.146:3001/api', // Основной backend сервер
-  'http://87.242.103.146/api',      // Локальная разработка (только для dev)
-];
+const API_SERVERS = process.env.NODE_ENV === 'development'
+  ? [
+      'http://localhost:3001/api',      // Локальная разработка
+      'http://87.242.103.146:3001/api', // Резервный сервер
+    ]
+  : [
+      'http://87.242.103.146:3001/api', // Production сервер
+    ];
 
 let currentApiUrl: string = import.meta.env.VITE_API_URL || API_SERVERS[0];
 
