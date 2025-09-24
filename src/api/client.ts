@@ -8,7 +8,7 @@ const API_SERVERS = process.env.NODE_ENV === 'development'
       'http://87.242.103.146/api',        // Резервный сервер через nginx
     ]
   : [
-      '/.netlify/functions/api',          // Production через Netlify Functions proxy
+      'http://87.242.103.146/api',        // Production - прямое подключение к backend
     ];
 
 let currentApiUrl: string = import.meta.env.VITE_API_URL || API_SERVERS[0];
