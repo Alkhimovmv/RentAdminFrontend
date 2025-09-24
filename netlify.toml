@@ -5,15 +5,14 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Netlify redirects не поддерживают внешние HTTP proxy
+# Используем прямое подключение к backend
+
 # SPA redirect - все маршруты направляются на index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-# API proxy отключен - используем прямое подключение к Cloud.ru backend
-# Backend API: https://87.242.103.146/api
-# Настройки CORS должны быть настроены на backend сервере
 
 # Заголовки безопасности
 [[headers]]

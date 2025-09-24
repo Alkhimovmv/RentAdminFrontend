@@ -4,11 +4,11 @@ import type { AxiosInstance } from 'axios';
 // Список возможных API серверов в порядке приоритета
 const API_SERVERS = process.env.NODE_ENV === 'development'
   ? [
-      'http://localhost:3001/api',    // Локальная разработка
-      'https://87.242.103.146/api',    // Резервный сервер через nginx
+      'http://localhost:3001/api',        // Локальная разработка
+      'http://87.242.103.146/api',        // Резервный сервер через nginx
     ]
   : [
-      'https://87.242.103.146/api',    // Production сервер через nginx (порт 80)
+      '/.netlify/functions/api',          // Production через Netlify Functions proxy
     ];
 
 let currentApiUrl: string = import.meta.env.VITE_API_URL || API_SERVERS[0];
