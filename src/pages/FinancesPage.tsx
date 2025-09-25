@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthenticatedQuery } from '../hooks/useAuthenticatedQuery';
 import { analyticsApi } from '../api/analytics';
 import { expensesApi } from '../api/expenses';
-import { type CreateExpenseDto, type Expense } from '../types/index';
+import { type CreateExpenseDto, type Expense, type MonthlyRevenue, type FinancialSummary } from '../types/index';
 import { formatDateShort } from '../utils/dateUtils';
 import ExpenseModal from '../components/ExpenseModal';
 import CustomSelect from '../components/CustomSelect';
@@ -21,21 +22,23 @@ const FinancesPage: React.FC = () => {
     ? selectedMonth.split('-').map(Number)
     : [currentYear, currentMonth];
 
-  const { data: monthlyRevenue = [] } = useQuery({
-    queryKey: ['analytics', 'monthly-revenue'],
-    queryFn: analyticsApi.getMonthlyRevenue,
-  });
+  const { data: monthlyRevenue = [] } = useAuthenticatedQuery<MonthlyRevenue[]>(
+    ['analytics', 'monthly-revenue'],
+    analyticsApi.getMonthlyRevenue
+  );
 
-  const { data: financialSummary } = useQuery({
-    queryKey: ['analytics', 'financial-summary', filterYear, filterMonth],
-    queryFn: () => analyticsApi.getFinancialSummary(filterYear, filterMonth),
-    enabled: !!filterYear && !!filterMonth,
-  });
+  const { data: financialSummary } = useAuthenticatedQuery<FinancialSummary>(
+    ['analytics', 'financial-summary', filterYear, filterMonth],
+    () => analyticsApi.getFinancialSummary(filterYear, filterMonth),
+    {
+      enabled: !!filterYear && !!filterMonth,
+    }
+  );
 
-  const { data: expenses = [] } = useQuery({
-    queryKey: ['expenses'],
-    queryFn: expensesApi.getAll,
-  });
+  const { data: expenses = [] } = useAuthenticatedQuery<Expense[]>(
+    ['expenses'],
+    expensesApi.getAll
+  );
 
   const createExpenseMutation = useMutation({
     mutationFn: expensesApi.create,

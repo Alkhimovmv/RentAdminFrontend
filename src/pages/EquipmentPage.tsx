@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthenticatedQuery } from '../hooks/useAuthenticatedQuery';
 import { equipmentApi } from '../api/equipment';
 import { type Equipment, type CreateEquipmentDto } from '../types/index';
 import EquipmentModal from '../components/EquipmentModal';
@@ -9,10 +10,7 @@ const EquipmentPage: React.FC = () => {
   const [editingEquipment, setEditingEquipment] = useState<Equipment | null>(null);
   const queryClient = useQueryClient();
 
-  const { data: equipment = [], isLoading } = useQuery({
-    queryKey: ['equipment'],
-    queryFn: equipmentApi.getAll,
-  });
+  const { data: equipment = [], isLoading } = useAuthenticatedQuery<Equipment[]>(['equipment'], equipmentApi.getAll);
 
   const createMutation = useMutation({
     mutationFn: equipmentApi.create,

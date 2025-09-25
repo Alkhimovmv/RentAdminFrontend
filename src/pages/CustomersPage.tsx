@@ -1,14 +1,15 @@
 import React, { useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useAuthenticatedQuery } from '../hooks/useAuthenticatedQuery';
 import { customersApi } from '../api/customers';
+import type { Customer } from '../types/index';
 
 const CustomersPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { data: customers = [], isLoading } = useQuery({
-    queryKey: ['customers'],
-    queryFn: customersApi.getAll,
-  });
+  const { data: customers = [], isLoading } = useAuthenticatedQuery<Customer[]>(
+    ['customers'],
+    customersApi.getAll
+  );
 
   const filteredCustomers = useMemo(() => {
     if (!searchQuery.trim()) return customers;

@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthenticatedQuery } from '../hooks/useAuthenticatedQuery';
 import { rentalsApi } from '../api/rentals';
 import { equipmentApi } from '../api/equipment';
-import type { Rental, CreateRentalDto } from '../types/index';
+import type { Rental, CreateRentalDto, Equipment } from '../types/index';
 import { formatDate, getStatusText, getStatusColor, getSourceText } from '../utils/dateUtils';
 import RentalModal from '../components/RentalModal';
 import CustomSelect from '../components/CustomSelect';
@@ -16,9 +17,9 @@ const RentalsPage: React.FC = () => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('week');
   const queryClient = useQueryClient();
 
-  const { data: rentals = [], isLoading } = useQuery(['rentals'], rentalsApi.getAll);
+  const { data: rentals = [], isLoading } = useAuthenticatedQuery<Rental[]>(['rentals'], rentalsApi.getAll);
 
-  const { data: equipment = [] } = useQuery(['equipment'], equipmentApi.getAll);
+  const { data: equipment = [] } = useAuthenticatedQuery<Equipment[]>(['equipment'], equipmentApi.getAll);
 
   // Фильтрация аренд по дате
   const filteredRentals = useMemo(() => {

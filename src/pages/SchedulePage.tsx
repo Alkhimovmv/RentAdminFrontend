@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useAuthenticatedQuery } from '../hooks/useAuthenticatedQuery';
 import { rentalsApi } from '../api/rentals';
 import { equipmentApi } from '../api/equipment';
-import { type Rental } from '../types/index';
+import { type Rental, type Equipment } from '../types/index';
 import { format, parseISO, startOfWeek, endOfWeek, addDays } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { getStatusColor, getStatusText } from '../utils/dateUtils';
@@ -26,10 +26,11 @@ const SchedulePage: React.FC = () => {
   const weekStart = startOfWeek(selectedDate, { locale: ru });
   const weekEnd = endOfWeek(selectedDate, { locale: ru });
 
-  const { data: equipment = [] } = useQuery(['equipment'], equipmentApi.getAll);
+  const { data: equipment = [] } = useAuthenticatedQuery<Equipment[]>(['equipment'], equipmentApi.getAll);
 
-  const { data: rentals = [] } = useQuery(['rentals', 'gantt'], () =>
-    rentalsApi.getGanttData()
+  const { data: rentals = [] } = useAuthenticatedQuery<Rental[]>(
+    ['rentals', 'gantt'],
+    () => rentalsApi.getGanttData()
   );
 
   // Создаем список всех экземпляров оборудования
