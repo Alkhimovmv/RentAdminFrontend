@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/RentAdmin/', // GitHub Pages base path для репозитория
+  base: '/', // Корневой путь для username.github.io репозитория
   test: {
     globals: true,
     environment: 'jsdom',
